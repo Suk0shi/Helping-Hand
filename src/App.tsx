@@ -3,8 +3,11 @@ import "leaflet/dist/leaflet.css"
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { Icon, divIcon, point } from "leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster"
+import { useCallback, useMemo, useRef, useState } from 'react';
+import DraggableMarker from "./components/DraggableMarker";
 
 function App() {
+  const [placeMarker, setPlaceMarker] = useState(false);
 
   //Fake markers for now
   const markers = [
@@ -36,6 +39,7 @@ function App() {
     })
   }
 
+  
   return (
     <>
       {/* coordinates then zoom */}
@@ -54,6 +58,14 @@ function App() {
             </Marker>
           ))}
         </MarkerClusterGroup>
+        {placeMarker ? <DraggableMarker /> : null}
+        {placeMarker ? 
+        <>
+        <button className="addPin" onClick={() => {setPlaceMarker(!placeMarker)}}>Cancel</button>
+        </>
+        :
+        <button className="addPin" onClick={() => {setPlaceMarker(!placeMarker)}}>Add Pin</button>
+        }
       </MapContainer>
     </>
   )
