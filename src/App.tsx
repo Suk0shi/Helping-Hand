@@ -1,13 +1,14 @@
 import './App.css'
 import "leaflet/dist/leaflet.css"
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import { Icon, divIcon, point } from "leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster"
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import DraggableMarker from "./components/DraggableMarker";
 
 function App() {
   const [placeMarker, setPlaceMarker] = useState(false);
+  const [position, setPosition] = useState(null)
 
   //Fake markers for now
   const markers = [
@@ -38,12 +39,35 @@ function App() {
       iconSize: point(33, 33, true),
     })
   }
-
   
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        setPosition([latitude, longitude]);
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+  }, []);
+
+  function CenterMap({ position }) {
+    const map = useMap();
+  
+    useEffect(() => {
+      if (position) {
+        map.flyTo(position, map.getZoom());
+      }
+    }, [map, position]);
+  
+    return null;
+  }
+
   return (
     <>
       {/* coordinates then zoom */}
-      <MapContainer center={[48.8566, 2.3522]} zoom={13} >
+      <MapContainer center={position || [51.505, -0.09]} zoom={13} >
         <TileLayer 
           url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'
         />
@@ -66,6 +90,7 @@ function App() {
         :
         <button className="addPin" onClick={() => {setPlaceMarker(!placeMarker)}}>Add Pin</button>
         }
+        {position && <CenterMap position={position} />}
       </MapContainer>
     </>
   )
