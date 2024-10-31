@@ -23,7 +23,36 @@ function DraggableMarker() {
     )
 
     function savePin() {
-        console.log(position);
+        console.log(position.lat);
+        console.log(position.lng);
+        //('test1', 48.86, 2.3522)
+
+        const payload = {pin: `'test5', ${position.lat}, ${position.lng}`}
+
+        console.log(JSON.stringify(payload))
+
+        fetch(`http://localhost:3000/pins/new`, {
+          method: 'Post', 
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+        body: JSON.stringify(payload),
+      })
+        .then((response) => {
+          if (response.status !== 200) {
+            throw new Error(response.statusText);
+          }
+  
+          return response.json();
+        })
+        .then(() => {
+          console.log("Comment Sent");
+          
+        })
+        .catch((err) => {
+          console.log(err.toString());
+        });
     }
   
     return (
