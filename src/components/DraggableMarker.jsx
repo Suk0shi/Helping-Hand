@@ -6,7 +6,7 @@ const center = {
     lng: -0.09,
   }
 
-function DraggableMarker() {
+function DraggableMarker({setPlaceMarker}) {
     const map = useMap();
     const [position, setPosition] = useState(map.getCenter())
     const markerRef = useRef(null)
@@ -27,7 +27,13 @@ function DraggableMarker() {
         console.log(position.lng);
         //('test1', 48.86, 2.3522)
 
-        const payload = {pin: `'test5', ${position.lat}, ${position.lng}`}
+        const payload = {
+          pin: {
+            name: 'test5',
+            lat: position.lat,
+            lng: position.lng,
+          },
+        }
 
         console.log(JSON.stringify(payload))
 
@@ -53,6 +59,8 @@ function DraggableMarker() {
         .catch((err) => {
           console.log(err.toString());
         });
+
+        setPlaceMarker(false);
     }
   
     return (

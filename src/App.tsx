@@ -5,6 +5,7 @@ import { Icon, divIcon, point } from "leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster"
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import DraggableMarker from "./components/DraggableMarker";
+import LeafletSearch from "./components/LeafletSearch";
 
 interface CenterMapProps {
   position: [number, number];
@@ -55,7 +56,7 @@ function App() {
           }
         )))
       })
-  }, [ ]);
+  }, [ placeMarker ]);
 
   const customIcon = new Icon({
     iconUrl: "https://cdn-icons-png.flaticon.com/128/10186/10186991.png",
@@ -103,7 +104,7 @@ function App() {
         <TileLayer 
           url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'
         />
-
+        <LeafletSearch />
         <MarkerClusterGroup
           chunkedLoading
           iconCreateFunction={createCustomClusterIcon}
@@ -114,7 +115,7 @@ function App() {
             </Marker>
           )) : null }
         </MarkerClusterGroup>
-        {placeMarker ? <DraggableMarker /> : null}
+        {placeMarker ? <DraggableMarker setPlaceMarker={setPlaceMarker} /> : null}
         {placeMarker ? 
         <>
         <button className="addPin" onClick={() => {setPlaceMarker(!placeMarker)}}>Cancel</button>
