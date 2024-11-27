@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 
 const center = {
@@ -7,6 +7,9 @@ const center = {
   }
 
 function DraggableMarker({setPlaceMarker}) {
+
+  const [pinText, setPinText] = useState('');
+
     const map = useMap();
     const [position, setPosition] = useState(map.getCenter())
     const markerRef = useRef(null)
@@ -22,6 +25,10 @@ function DraggableMarker({setPlaceMarker}) {
       [],
     )
 
+    const handleInputChange = (event) => {
+      setPinText(event.target.value);
+    };
+
     function savePin() {
         console.log(position.lat);
         console.log(position.lng);
@@ -29,7 +36,7 @@ function DraggableMarker({setPlaceMarker}) {
 
         const payload = {
           pin: {
-            name: 'test5',
+            name: pinText,
             lat: position.lat,
             lng: position.lng,
           },
@@ -75,6 +82,7 @@ function DraggableMarker({setPlaceMarker}) {
             </Popup>
         </Marker>
         <button className="placePin" onClick={() => {savePin()}}>Place Pin</button>
+        <input className='inputPinName' type="text" value={pinText} onChange={handleInputChange}/>
       </>
     )
 }

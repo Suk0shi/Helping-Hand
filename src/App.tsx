@@ -15,6 +15,7 @@ interface CenterMapProps {
 interface Marker {
   geocode: [number, number];
   popUp: string;
+  id: number;
 }
 
 function App() {
@@ -52,7 +53,8 @@ function App() {
         setMarkers(data.pins.map(pin => (
           {
             geocode: [pin.lat, pin.lng],
-            popUp: pin.pinname
+            popUp: pin.pinname,
+            id: pin.id
           }
         )))
       })
@@ -111,7 +113,11 @@ function App() {
         >
           {markers ? markers.map(marker => (
             <Marker position={marker.geocode} icon={customIcon}>
-              <Popup>{marker.popUp}</Popup>
+              <Popup>
+                {marker.popUp}
+                <br/>
+                <a href={`/pin/${marker.id}`}>View Page</a>
+              </Popup>
             </Marker>
           )) : null }
         </MarkerClusterGroup>

@@ -57,6 +57,15 @@
   height: 40px;
 }
 
+.inputPinName {
+  position: absolute;
+  bottom: 20px; left: 230px;
+  z-index: 1000;
+  height: 40px;
+  border-radius: 10px;
+  border-style: none;
+}
+
 .centerMap {
   position: absolute;
   bottom: 20px; left: 200px;
