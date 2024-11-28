@@ -8,8 +8,7 @@ const center = {
 
 function DraggableMarker({setPlaceMarker}) {
 
-  const [pinText, setPinText] = useState('');
-
+    const [pinText, setPinText] = useState('');
     const map = useMap();
     const [position, setPosition] = useState(map.getCenter())
     const markerRef = useRef(null)
