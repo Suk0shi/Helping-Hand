@@ -1,12 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import '../styles/PinPage.css'
 
 function PinPage() {
     const [pinContextText, setpinContextText] = useState('');
     const [pinContextPhoto, setpinContextPhoto] = useState('');
     const [pinContextVideo, setpinContextVideo] = useState('');
+    const [pinName, setPinName] = useState(null);
+    const [content, setContent] = useState(null);
     const [addContent, setAddContent] = useState(false);
     const { id } = useParams();
+
+    useEffect(() => {
+      fetch(`http://localhost:3000/pins/${id}`, {
+        mode: 'cors', 
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => { 
+          console.log(data);
+          setPinName(data.pinName[0].pinname);
+          setContent(data.content.map(content => (
+            {
+              text: content.textcontent,
+              img: content.imgcontent,
+              video: content.videocontent
+            }
+          )))
+        })
+    }, [ addContent ]);
 
     function addPinContent() {
 
@@ -17,8 +42,6 @@ function PinPage() {
             video: pinContextVideo,
           },
         }
-
-        console.log(JSON.stringify(payload))
 
         fetch(`http://localhost:3000/pins/${id}`, {
           method: 'Post', 
@@ -46,31 +69,45 @@ function PinPage() {
         setAddContent(false);
     }
 
-    return (
+  return (
+    <>
+      <h1>{pinName}</h1>
+      {content ? content.map(content => (
+        <div>
+          <p>{content.text}</p>
+          {content.img ?
+            <img className="imgContent" src={content.img} alt="User submitted image" />
+            : null
+          }
+          <br />
+          {content.video ?
+            <img className="videoContent" src={content.video} alt="User submitted video" />
+            : null
+          }
+        </div>   
+      )) : null}
+      {addContent ? 
         <>
-            <h1>You made it</h1>
-            {addContent ? 
-                <>
-                <button className="addContentButton" onClick={() => {setAddContent(!addContent)}}>Cancel</button>
-                </>
-                :
-                <button className="addContentButton" onClick={() => {setAddContent(!addContent)}}>Add Content</button>
-            }
-            {addContent ? 
-                <>
-                  <label htmlFor="inputPinContextText">Text</label>
-                  <input className='inputPinContextText' id="inputPinContextText" type="text" value={pinContextText} onChange={(e) => { setpinContextText(e.target.value); } } />
-                  <label htmlFor="inputPinContextPhoto">Image Link</label>
-                  <input className='inputPinContextPhoto' id="inputPinContextPhoto" type="text" value={pinContextPhoto} onChange={(e) => { setpinContextPhoto(e.target.value); } } />
-                  <label htmlFor="inputPinContextVideo">Video Link</label>
-                  <input className='inputPinContextVideo' id="inputPinContextVideo" type="text" value={pinContextVideo} onChange={(e) => { setpinContextVideo(e.target.value); } } />
-                  <button onClick={() => {addPinContent()}}>Submit</button>
-                </>
-                :
-                null
-            }
+        <button className="addContentButton" onClick={() => {setAddContent(!addContent)}}>Cancel</button>
         </>
-    );
+        :
+        <button className="addContentButton" onClick={() => {setAddContent(!addContent)}}>Add Content</button>
+      }
+      {addContent ? 
+        <>
+          <label htmlFor="inputPinContextText">Text</label>
+          <input className='inputPinContextText' id="inputPinContextText" type="text" value={pinContextText} onChange={(e) => { setpinContextText(e.target.value); } } />
+          <label htmlFor="inputPinContextPhoto">Image Link</label>
+          <input className='inputPinContextPhoto' id="inputPinContextPhoto" type="text" value={pinContextPhoto} onChange={(e) => { setpinContextPhoto(e.target.value); } } />
+          <label htmlFor="inputPinContextVideo">Video Link</label>
+          <input className='inputPinContextVideo' id="inputPinContextVideo" type="text" value={pinContextVideo} onChange={(e) => { setpinContextVideo(e.target.value); } } />
+          <button onClick={() => {addPinContent()}}>Submit</button>
+        </>
+        :
+        null
+      }
+    </>
+  );
 }
 
 export default PinPage;

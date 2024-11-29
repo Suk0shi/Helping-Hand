@@ -6,6 +6,7 @@ import MarkerClusterGroup from "react-leaflet-cluster"
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import DraggableMarker from "./components/DraggableMarker";
 import LeafletSearch from "./components/LeafletSearch";
+import { Link } from 'react-router-dom';
 
 interface CenterMapProps {
   position: [number, number];
@@ -116,7 +117,9 @@ function App() {
               <Popup>
                 {marker.popUp}
                 <br/>
-                <a href={`/pin/${marker.id}`}>View Page</a>
+                <Link to={`/pin/${marker.id}`}>
+                  View Page
+                </Link>
               </Popup>
             </Marker>
           )) : null }
