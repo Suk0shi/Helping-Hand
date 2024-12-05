@@ -1,9 +1,62 @@
+body {
+  background-color: white;
+  place-items: start;
+}
+
+h1, p, label {
+  color: black;
+}
+
+.pinTitle {
+  text-align: start;
+  padding-left: 20px;
+  font-family: "farnham-headline", serif;
+  font-weight: 200;
+  letter-spacing: 2px;
+  font-size: 30px;
+}
+
 .imgContent {
     width: 500px;
     height: auto;
+    border-radius: 20px;
 }
 
 .videoContent {
     width: 500px;
     height: auto;
+    border-radius: 20px;
+}
+
+.contentColumns {
+  column-count: 3; 
+  column-gap: 30px;
+  width: 100vw - 20px;
+  margin-top: 30px;
+  padding: 0 20px;
+}
+  
+.contentColumnItem {
+  margin-bottom: 16px; 
+  display: inline-block; 
+  width: 100%; 
+  border: 2px;
+  
+  border-color: #86836D;
+  border-radius: 20px;
+  background-color: #86836D;
+}
+
+.addContentButton {
+  position: fixed;
+  top: 15px;
+  right: 40px;
+  padding: 0;
+  border-radius: 100px;
+  width: 80px;
+  height: auto;
+  margin: -30px -10px;
+  border-radius: 100px;
+  cursor: pointer;
+  width: 130px;
 }

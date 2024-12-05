@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import DraggableMarker from "./components/DraggableMarker";
 import LeafletSearch from "./components/LeafletSearch";
 import { Link } from 'react-router-dom';
+import Header from './components/Header';
 
 interface CenterMapProps {
   position: [number, number];
@@ -102,6 +103,7 @@ function App() {
 
   return (
     <>
+      <Header/>
       {/* coordinates then zoom */}
       <MapContainer center={position || [51.505, -0.09]} zoom={13} >
         <TileLayer 

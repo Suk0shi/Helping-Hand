@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import '../styles/PinPage.css'
+import Header from "../components/Header";
+import addLogo from '../assets/addLogo.png';
+import cancelLogo from '../assets/cancelLogo.png';
 
 function PinPage() {
     const [pinContextText, setpinContextText] = useState('');
@@ -34,12 +37,16 @@ function PinPage() {
     }, [ addContent ]);
 
     function addPinContent() {
-
+        let video = null;  
+        if (pinContextVideo) {
+          const urlObj = new URL(pinContextVideo);  
+          video = urlObj.searchParams.get('v');
+        }  
         const payload = {
           pinContent: {
             text: pinContextText,
             photo: pinContextPhoto,
-            video: pinContextVideo,
+            video: video,
           },
         }
 
@@ -71,27 +78,37 @@ function PinPage() {
 
   return (
     <>
-      <h1>{pinName}</h1>
-      {content ? content.map(content => (
-        <div>
-          <p>{content.text}</p>
-          {content.img ?
-            <img className="imgContent" src={content.img} alt="User submitted image" />
-            : null
-          }
-          <br />
-          {content.video ?
-            <img className="videoContent" src={content.video} alt="User submitted video" />
-            : null
-          }
-        </div>   
-      )) : null}
+      <Header/>
+      <h1 className="pinTitle">{pinName}</h1>
+      <div className="contentColumns">
+        {content ? content.map((content, index) => (
+          <div key={index} className="contentColumnItem">
+            {content.text ?
+              <p>{content.text}</p>
+              : null
+            }
+            {content.img ?
+              <img className="imgContent" src={content.img} alt="User submitted image" />
+              : null
+            }
+            {content.video ?
+              <iframe 
+                src={`https://www.youtube.com/embed/${content.video}?autoplay=1&mute=1&loop=1&playlist=${content.video}&modestbranding=1&showinfo=0&rel=0`} 
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen>
+              </iframe>
+              : null
+            }
+          </div>   
+        )) : <p>No content yet. Add something!</p>}
+      </div>
       {addContent ? 
         <>
-        <button className="addContentButton" onClick={() => {setAddContent(!addContent)}}>Cancel</button>
+        <img src={cancelLogo} alt="Cancel Adding Content Button" className="addContentButton" onClick={() => {setAddContent(!addContent)}}/>
         </>
         :
-        <button className="addContentButton" onClick={() => {setAddContent(!addContent)}}>Add Content</button>
+        <img src={addLogo} alt="Add Content Button" className="addContentButton" onClick={() => {setAddContent(!addContent)}}/>
       }
       {addContent ? 
         <>
